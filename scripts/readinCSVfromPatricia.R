@@ -67,3 +67,12 @@ save(procdatar,file="data/nestedTibble.RData")
 
 procdatar%>%unnest %>% write_csv("data/unnestedData.csv")
 
+# For cramping it down to a social media bit
+read_csv("../data/InputSocialMediaTrackingSheet.csv")%>%
+  group_by(IDString,Facebook,Twitter)%>%nest%>% 
+  mutate(IDString=str_c(IDString,"_",map(data,
+        function(x){
+          str_c(unlist(x["Year"]),collapse="_")
+        })))%>%
+  select(-data)%>%
+  write_csv("../data/SocialMediaTrackingSheet.csv")
